@@ -47,19 +47,15 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+# Generate messages in the 'msg' folder
+add_message_files(
+  FILES Message.msg
+)
 
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+# Generate services in the 'srv' folder
+add_service_files(
+  FILES Service.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -68,11 +64,11 @@ find_package(catkin REQUIRED COMPONENTS
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#  DEPENDENCIES
-#  std_msgs
-# )
+# Generate added messages and services with any dependencies listed here
+generate_messages(
+ DEPENDENCIES
+ std_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -120,6 +116,19 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
 )
+
+
+add_executable(publisher_client src/publisher_client.cpp)
+target_link_libraries(publisher_client ${catkin_LIBRARIES})
+add_dependencies(publisher_client publisher_subscriber_server_client_generate_messages_cpp)
+
+add_executable(server src/server.cpp)
+target_link_libraries(server ${catkin_LIBRARIES})
+add_dependencies(server publisher_subscriber_server_client_generate_messages_cpp)
+
+add_executable(subscriber src/subscriber.cpp)
+target_link_libraries(subscriber ${catkin_LIBRARIES})
+add_dependencies(subscriber publisher_subscriber_server_client_generate_messages_cpp)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
